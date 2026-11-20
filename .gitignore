@@ -13,6 +13,7 @@
 
 # large demo video: upload it through GitHub's README editor instead
 docs/*.mov
+docs/*.mp4
 
 # Claude Code: share project hooks (.claude/settings.json), keep personal settings local
 .claude/settings.local.json
