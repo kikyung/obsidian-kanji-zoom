@@ -1,3 +1,5 @@
+
+
 # Kanji Zoom
 
 **Kanji too small to read?** Kanji Zoom opens your Japanese study notes full-screen at up to 72px,
@@ -7,8 +9,12 @@ so every stroke is clear — with furigana and kanji hover lookups on top.
 
 <!-- TODO: demo video — drag docs/demo.mov into this README in GitHub's web editor (it uploads and embeds it) -->
 
+
+https://github.com/user-attachments/assets/3414fe81-4e29-4cd0-81a4-2287321b60ea
+
+
 <p align="center">
-  <img src="docs/before.png" alt="Note with the Kanji Zoom button next to the reading/edit toggle" width="640"><br>
+  <img src="docs/before.png" alt="Note with the Kanji Zoom button next to the reading/edit toggle" width="480"><br>
   <sub><b>One click</b> on the 🔍 button next to the reading/edit toggle…</sub>
 </p>
 
