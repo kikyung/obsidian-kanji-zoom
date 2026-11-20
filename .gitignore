@@ -1,0 +1,18 @@
+# build output at the repo root only (attached to GitHub releases instead).
+# Leading slash matters: src/main.js is the source and must be committed.
+/main.js
+
+# Obsidian plugin settings
+/data.json
+
+# downloaded source dictionary
+*.xml
+*.xml.gz
+
+.DS_Store
+
+# large demo video: upload it through GitHub's README editor instead
+docs/*.mov
+
+# Claude Code: share project hooks (.claude/settings.json), keep personal settings local
+.claude/settings.local.json
