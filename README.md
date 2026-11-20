@@ -108,4 +108,4 @@ If this plugin helps your study, you can [buy me a coffee ☕](https://buymeacof
 ## License
 
 - Code: [MIT](LICENSE)
-- Kanji data: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) © Electronic Dictionary Research and Development Group, used under [CC BY-SA 4.0](https://www.edrdg.org/edrdg/licence.html). JLPT levels are the old 4-level ones from KANJIDIC2.
+- Kanji data: [KANJIDIC2](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) © Electronic Dictionary Research and Development Group, used under [CC BY-SA 4.0](https://www.edrdg.org/edrdg/licence.html) — see [data/LICENSE-KANJIDIC2.md](data/LICENSE-KANJIDIC2.md). JLPT levels are the old 4-level ones from KANJIDIC2.
