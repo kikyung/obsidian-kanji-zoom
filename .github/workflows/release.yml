@@ -7,7 +7,9 @@ on:
       - "*"
 
 permissions:
-  contents: write
+  contents: write      # create the release
+  id-token: write      # sign build provenance attestations
+  attestations: write  # store them on GitHub
 
 # One release run per tag at a time (re-pushing a tag never races itself)
 concurrency:
@@ -35,6 +37,16 @@ jobs:
       - name: Build + release checks
         run: python3 tools/check.py --release
 
+      # Signed proof that these files were built by this workflow from this commit
+      # (shown as "artifact attestations" on GitHub and checked by the community directory)
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            main.js
+            manifest.json
+            styles.css
+
       # Re-pushing a tag must not create duplicate releases:
       #   published release exists -> leave it untouched (never change a public release automatically)
       #   draft release(s) exist    -> replace them with one fresh draft
@@ -58,8 +70,10 @@ jobs:
             gh api -X DELETE "repos/${GITHUB_REPOSITORY}/releases/${id}"
           done
 
+          # Release notes: list of merged PRs since the previous release
           gh release create "${TAG}" \
             --title "${TAG}" \
             --draft \
             --verify-tag \
+            --generate-notes \
             main.js manifest.json styles.css
