@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----------------------------------------------------------------------------
-
-The file data/kanji.json (and the copy embedded in the built main.js) is
-derived from KANJIDIC2, the property of the Electronic Dictionary Research and
-Development Group (EDRDG), and is used in conformance with the Group's licence
-(Creative Commons Attribution-ShareAlike 4.0).
-See https://www.edrdg.org/edrdg/licence.html
