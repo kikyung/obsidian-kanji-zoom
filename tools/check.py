@@ -116,6 +116,7 @@ def check_source(manifest):
         (r"\(\?<[=!]", "uses regex lookbehind (crashes on older iOS Safari)"),
         (r"\bdetachLeavesOfType\s*\(", "detaches leaves in onunload (Obsidian guidelines)"),
         (r"\.style\.(?!setProperty\b)[a-zA-Z]+\s*=(?!=)", "assigns inline styles (use CSS classes or CSS variables; Obsidian review flags this)"),
+        (r"\b(localStorage|sessionStorage)\b", "uses localStorage/sessionStorage (use loadData/saveData; the community directory flags this)"),
     ]
     for pattern, msg in rules:
         if re.search(pattern, code):

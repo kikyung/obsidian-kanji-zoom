@@ -162,7 +162,12 @@ function load(opts) {
     return ob.mod;
   };
   var win = {
-    localStorage: { getItem: function (k) { return k === "language" ? opts.stored || null : null; } },
+    localStorage: {
+      getItem: function (k) {
+        if (opts.onStorage) opts.onStorage(k);
+        return null;
+      },
+    },
     setTimeout: function () { return 0; },
     clearTimeout: function () {},
     open: function () {},
@@ -285,12 +290,19 @@ test("English Obsidian: English UI, Korean reading off", function () {
   eq(e.showKoreanOf(e.DEFAULT_SETTINGS), false);
 });
 
-test("falls back to stored language when getLanguage() is missing", function () {
-  eq(load({ stored: "ko" }).t.UI_LANG, "ko");
+test("getLanguage() wins over a stale moment locale", function () {
+  eq(load({ language: "ko", momentLocale: "en" }).t.UI_LANG, "ko");
 });
 
-test("moment locale alone does not break detection", function () {
-  eq(load({ momentLocale: "en", stored: "ko" }).t.UI_LANG, "ko");
+test("falls back to the moment locale when getLanguage() is missing", function () {
+  eq(load({ momentLocale: "ko" }).t.UI_LANG, "ko");
+});
+
+test("never reads localStorage (community directory flags it)", function () {
+  var touched = [];
+  load({ language: "ko", onStorage: function (k) { touched.push(k); } });
+  load({ momentLocale: "ko", onStorage: function (k) { touched.push(k); } }); // no getLanguage()
+  eq(touched, []);
 });
 
 test("French Obsidian: French meanings automatically", function () {
