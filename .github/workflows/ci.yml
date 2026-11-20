@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+# Read-only token: CI never needs to write to the repo.
+# (Uses pull_request, not pull_request_target, so fork PRs never see secrets.)
+permissions:
+  contents: read
+
+jobs:
+  # Job id "check" is the required status check in the "Protect main" ruleset — keep the name.
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build, compatibility checks and tests
+        run: python3 tools/check.py

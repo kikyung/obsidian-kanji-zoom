@@ -1,0 +1,40 @@
+name: Release
+
+# Push a tag that matches manifest.json "version" (e.g. 0.1.0, no "v" prefix)
+on:
+  push:
+    tags:
+      - "*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check tag matches manifest version
+        run: |
+          VERSION=$(python3 -c "import json;print(json.load(open('manifest.json'))['version'])")
+          if [ "$VERSION" != "${GITHUB_REF_NAME}" ]; then
+            echo "Tag ${GITHUB_REF_NAME} != manifest version $VERSION"; exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Builds main.js; fails on any compatibility issue, test failure or leftover placeholder
+      - name: Build + release checks
+        run: python3 tools/check.py --release
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --draft \
+            main.js manifest.json styles.css
