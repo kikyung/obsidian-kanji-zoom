@@ -9,6 +9,11 @@ on:
 permissions:
   contents: write
 
+# One release run per tag at a time (re-pushing a tag never races itself)
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -30,11 +35,31 @@ jobs:
       - name: Build + release checks
         run: python3 tools/check.py --release
 
-      - name: Create draft release
+      # Re-pushing a tag must not create duplicate releases:
+      #   published release exists -> leave it untouched (never change a public release automatically)
+      #   draft release(s) exist    -> replace them with one fresh draft
+      #   nothing exists            -> create the draft
+      - name: Create or refresh draft release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
-            --title "${GITHUB_REF_NAME}" \
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          RELEASES=$(gh api --paginate "repos/${GITHUB_REPOSITORY}/releases" \
+            --jq ".[] | select(.tag_name == \"${TAG}\") | {id, draft}" | jq -s .)
+
+          if [ "$(echo "$RELEASES" | jq '[.[] | select(.draft == false)] | length')" -gt 0 ]; then
+            echo "::notice::Release ${TAG} is already published — leaving it unchanged."
+            exit 0
+          fi
+
+          for id in $(echo "$RELEASES" | jq -r '.[] | select(.draft == true) | .id'); do
+            echo "Replacing existing draft release ${id} for ${TAG}"
+            gh api -X DELETE "repos/${GITHUB_REPOSITORY}/releases/${id}"
+          done
+
+          gh release create "${TAG}" \
+            --title "${TAG}" \
             --draft \
+            --verify-tag \
             main.js manifest.json styles.css
