@@ -1,5 +1,3 @@
-
-
 # Kanji Zoom
 
 **Kanji too small to read?** Kanji Zoom opens your Japanese study notes full-screen at up to 72px,
@@ -7,11 +5,7 @@ so every stroke is clear — with furigana and kanji hover lookups on top.
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/kikyung)
 
-<!-- TODO: demo video — drag docs/demo.mov into this README in GitHub's web editor (it uploads and embeds it) -->
-
-
 https://github.com/user-attachments/assets/3414fe81-4e29-4cd0-81a4-2287321b60ea
-
 
 <p align="center">
   <img src="docs/before.png" alt="Note with the Kanji Zoom button next to the reading/edit toggle" width="480"><br>
@@ -90,7 +84,7 @@ python3 tools/build.py          # build only: src/main.js + data/kanji.json → 
 python3 tools/test.py           # tests only (Node.js, or macOS JavaScriptCore if Node isn't installed)
 ```
 
-Edit `src/main.js`, never `main.js` (it is generated). `tools/check.py` catches common Obsidian review rejections: manifest rules, `innerHTML`, default hotkeys, Node-only `require` on a mobile-enabled plugin, network calls, regex lookbehind (older iOS), and leftover placeholders in `--release` mode. CI runs it on every push.
+Edit `src/main.js`, never `main.js` (it is generated). `tools/check.py` catches common Obsidian review rejections: manifest rules, `innerHTML`, default hotkeys, Node-only `require` on a mobile-enabled plugin, network calls, regex lookbehind (older iOS), and unfinished manifest values in `--release` mode. CI runs it on every push.
 
 Regenerate `data/kanji.json` from the KANJIDIC2 source (maintainers only, e.g. for a new KANJIDIC2 release; the result is committed and embedded at build time):
 
