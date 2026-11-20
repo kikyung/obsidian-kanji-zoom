@@ -130,11 +130,11 @@ const STRINGS = {
 function rawLocale() {
   let l = "en";
   try {
-    // Obsidian's UI language: getLanguage() (1.8+), then the stored setting.
-    // moment.locale() is not reliable — it can stay "en" while the UI is Korean.
+    // Obsidian's UI language via the official API (1.8.0+, our minAppVersion).
+    // moment.locale() is only a fallback: it can stay "en" while the UI is Korean.
+    // Never read localStorage — the community directory flags it.
     l =
       (typeof obsidian.getLanguage === "function" && obsidian.getLanguage()) ||
-      window.localStorage.getItem("language") ||
       (obsidian.moment && obsidian.moment.locale()) ||
       "en";
   } catch (e) {
