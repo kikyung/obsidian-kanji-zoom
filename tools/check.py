@@ -141,6 +141,18 @@ def check_css():
             warnings.append(f"styles.css: class .{sel} is not namespaced with 'jpv-' (may clash with themes)")
 
 
+def check_readme():
+    """The community directory rejects READMEs with leftover template text."""
+    readme = read("README.md")
+    for pattern, what in [
+        (r"\bTODO\b|\bFIXME\b", "a TODO/FIXME note"),
+        (r"<!--", "an HTML comment (template note)"),
+        (r"\[description\]|lorem ipsum|YOUR_", "template text"),
+    ]:
+        if re.search(pattern, readme, flags=re.I):
+            err(f"README.md: contains {what} — the Obsidian community directory flags this")
+
+
 def check_data():
     data = load_json("data", "kanji.json")
     if data is None:
@@ -182,6 +194,7 @@ def main():
     manifest = check_manifest()
     check_source(manifest)
     check_css()
+    check_readme()
     check_data()
     if build() and RUN_TESTS and not errors:
         run_tests()
