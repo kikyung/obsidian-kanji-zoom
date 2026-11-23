@@ -61,6 +61,16 @@
 
 .jpv-toolbar button { cursor: pointer; }
 
+/* The full-screen viewer covers Obsidian's title bar, so the toolbar takes over
+   as the window drag region (desktop app). Controls stay clickable. */
+.jpv-toolbar { -webkit-app-region: drag; }
+.jpv-toolbar label,
+.jpv-toolbar input,
+.jpv-toolbar button { -webkit-app-region: no-drag; }
+
+/* macOS hidden title bar: keep the title clear of the traffic-light buttons */
+body.mod-macos.is-hidden-frameless:not(.is-fullscreen) .jpv-toolbar { padding-left: 84px; }
+
 /* --- reading area --- */
 .jpv-scroll {
   flex: 1;

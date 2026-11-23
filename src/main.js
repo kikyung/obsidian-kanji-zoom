@@ -392,6 +392,24 @@ function enhanceRendered(root) {
 /* Viewer modal                                                         */
 /* ------------------------------------------------------------------ */
 
+// Cmd/Ctrl + wheel → font size. Wheel up (negative deltaY) zooms in.
+// Deltas are accumulated so a trackpad's many small events and a mouse's big
+// notches both give a steady 2px step per WHEEL_STEP pixels of scrolling.
+const WHEEL_STEP = 50;
+function wheelZoomStep(acc, deltaY, deltaMode) {
+  const px = deltaMode === 1 ? deltaY * 16 : deltaMode === 2 ? deltaY * 400 : deltaY;
+  const zoom = -px; // positive = zoom in
+  // Reset when the direction flips, so reversing responds immediately
+  let total = (acc && Math.sign(acc) !== Math.sign(zoom) ? 0 : acc || 0) + zoom;
+  let steps = 0;
+  while (Math.abs(total) >= WHEEL_STEP) {
+    const dir = Math.sign(total);
+    steps += dir;
+    total -= dir * WHEEL_STEP;
+  }
+  return { steps, acc: total };
+}
+
 class JpViewerModal extends Modal {
   constructor(plugin, file, markdown, fullMarkdown) {
     super(plugin.app);
@@ -476,6 +494,22 @@ class JpViewerModal extends Modal {
     this.scope.register(["Shift"], "=", () => (this.setSize(s.fontSize + 2), false));
     this.scope.register([], "+", () => (this.setSize(s.fontSize + 2), false));
     this.scope.register([], "-", () => (this.setSize(s.fontSize - 2), false));
+    // Cmd/Ctrl + = / - zoom the viewer text instead of the whole app
+    this.scope.register(["Mod"], "=", () => (this.setSize(s.fontSize + 2), false));
+    this.scope.register(["Mod", "Shift"], "=", () => (this.setSize(s.fontSize + 2), false));
+    this.scope.register(["Mod"], "-", () => (this.setSize(s.fontSize - 2), false));
+
+    // Cmd (macOS) / Ctrl + mouse wheel, and trackpad pinch (sent as ctrl+wheel)
+    this.wheelAcc = 0;
+    this.onWheel = (e) => {
+      if (!(e.metaKey || e.ctrlKey)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const r = wheelZoomStep(this.wheelAcc, e.deltaY, e.deltaMode);
+      this.wheelAcc = r.acc;
+      if (r.steps) this.setSize(s.fontSize + r.steps * 2);
+    };
+    this.modalEl.addEventListener("wheel", this.onWheel, { passive: false });
 
     // --- render ---
     const sourcePath = this.file ? this.file.path : "";
@@ -646,6 +680,7 @@ class JpViewerModal extends Modal {
   onClose() {
     clearTimeout(this.showTimer);
     clearTimeout(this.hideTimer);
+    if (this.onWheel) this.modalEl.removeEventListener("wheel", this.onWheel);
     if (this.popup) this.popup.remove();
     this.popup = null;
     this.component.unload();
@@ -888,6 +923,7 @@ class JpViewerSettingTab extends PluginSettingTab {
 module.exports = JpViewerPlugin;
 module.exports.__test = {
   buildNoteDictionary,
+  wheelZoomStep,
   sliceSection,
   stripReadings,
   JpViewerModal,
