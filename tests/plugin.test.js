@@ -444,5 +444,35 @@ test("popup for a kanji outside the dictionary says so", function () {
   assert(el.texts().indexOf("Not in the kanji dictionary.") >= 0);
 });
 
+out("Wheel zoom");
+
+function wheel(events) {
+  var acc = 0, total = 0;
+  events.forEach(function (ev) {
+    var r = t.wheelZoomStep(acc, ev[0], ev[1] || 0);
+    acc = r.acc; total += r.steps;
+  });
+  return total;
+}
+
+test("mouse wheel up one notch zooms in, down zooms out", function () {
+  eq(wheel([[-100]]), 2, "wheel up");
+  eq(wheel([[100]]), -2, "wheel down");
+});
+
+test("small trackpad deltas add up instead of being lost", function () {
+  eq(wheel([[-10], [-10], [-10], [-10]]), 0, "40px is under one step");
+  eq(wheel([[-10], [-10], [-10], [-10], [-10]]), 1, "50px is one step");
+});
+
+test("reversing direction responds immediately", function () {
+  eq(wheel([[-40], [60]]), -1, "leftover zoom-in does not cancel the zoom-out");
+});
+
+test("line-mode wheel deltas are scaled to pixels", function () {
+  eq(wheel([[-3, 1]]), 0 + Math.floor(48 / 50), "3 lines = 48px");
+  eq(wheel([[-4, 1]]), 1, "4 lines = 64px");
+});
+
 out("RESULT pass=" + __results.pass + " fail=" + __results.fail);
 __results.lines.join("\n");

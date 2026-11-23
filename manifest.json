@@ -1,7 +1,7 @@
 {
   "id": "kanji-zoom",
   "name": "Kanji Zoom",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minAppVersion": "1.8.0",
   "description": "Enlarge small kanji in Japanese study notes with a full-screen zoom viewer, furigana and hover lookups.",
   "author": "kikyung",

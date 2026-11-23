@@ -42,7 +42,8 @@ https://github.com/user-attachments/assets/3414fe81-4e29-4cd0-81a4-2287321b60ea
 - Command palette: **Kanji Zoom: Open current note** (assign a hotkey if you like)
 - Reading view: 🔍 button next to h1–h3 headings opens just that section
 
-Keyboard in the viewer: `+` / `-` font size, `Esc` close.
+In the viewer: `+` / `-`, `Cmd`/`Ctrl` + `=` / `-`, or `Cmd`/`Ctrl` + mouse wheel (trackpad pinch too) change the font size; `Esc` closes.
+The viewer's toolbar works as a title bar, so you can still drag the window.
 
 ## Note format tips
 
