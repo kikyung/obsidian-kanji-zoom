@@ -1,53 +1,40 @@
 # Kanji Zoom
 
-**Kanji too small to read?** Kanji Zoom opens your Japanese study notes full-screen at up to 72px,
-so every stroke is clear — with furigana and kanji hover lookups on top.
+Read Japanese study notes in Obsidian with larger text, furigana, and offline kanji lookups.
 
-[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/kikyung)
+![Kanji Zoom demo showing how to open the viewer, resize text, read furigana, and look up kanji](docs/kanji-zoom-demo.gif)
 
-https://github.com/user-attachments/assets/3414fe81-4e29-4cd0-81a4-2287321b60ea
+## Install
 
-<table>
-  <tr>
-    <td align="center" width="33%">
-      <img src="docs/before-crop.png" alt="Note with the Kanji Zoom button next to the reading/edit toggle"><br>
-      <sub><b>1. Click</b> 🔍 next to the reading/edit toggle</sub>
-    </td>
-    <td align="center" width="33%">
-      <img src="docs/popup1.png" alt="Zoom viewer with large text and furigana"><br>
-      <sub><b>2. Read big</b> with furigana above every kanji</sub>
-    </td>
-    <td align="center" width="33%">
-      <img src="docs/popup2.png" alt="Kanji popup with readings, meanings and words from the note"><br>
-      <sub><b>3. Hover a kanji</b> for readings, meanings and your note's words</sub>
-    </td>
-  </tr>
-</table>
+In Obsidian, go to **Settings → Community plugins → Browse**, search for **Kanji Zoom**, then select **Install** and **Enable**. [View the community listing](https://community.obsidian.md/plugins/kanji-zoom).
 
-## Features
+<details>
+<summary>Manual installation</summary>
 
-- **Zoom viewer** — opens the current note (or one section) full-screen. Font size 18–72px, line height and furigana toggle are remembered.
-- **Furigana** — inline readings like `参加(さんか)` or `参加（さんか）` are rendered as ruby text above the kanji.
-- **Kanji popup** — hover (or tap on mobile) any kanji to see:
-  - On / Kun readings, meanings, stroke count, grade, old JLPT level (KANJIDIC2, ~3,000 kanji, works offline)
-  - Meanings in **English, French, Spanish or Portuguese** — follows Obsidian's language or pick one in settings (falls back to English when a kanji has no translation)
-  - Optional Korean (hanja) reading — on by default when Obsidian is in Korean
-  - **Words in this note** that contain the kanji — pulled from your vocabulary tables, grammar headings and inline readings
-- Korean and English UI (follows Obsidian's language).
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](../../releases/latest).
+2. Copy them into `<your vault>/.obsidian/plugins/kanji-zoom/`.
+3. Reload Obsidian and enable **Kanji Zoom** under **Settings → Community plugins**.
 
-## How to open
+</details>
 
-- 🔍 icon in the note's header bar (top right)
-- 🔍 ribbon icon
-- Command palette: **Kanji Zoom: Open current note** (assign a hotkey if you like)
-- Reading view: 🔍 button next to h1–h3 headings opens just that section
+## Use Kanji Zoom
 
-In the viewer: `+` / `-`, `Cmd`/`Ctrl` + `=` / `-`, or `Cmd`/`Ctrl` + mouse wheel (trackpad pinch too) change the font size; `Esc` closes.
-The viewer's toolbar works as a title bar, so you can still drag the window.
+1. Click the magnifier in the top-right corner of a note to open the full-screen viewer. You can also use the ribbon magnifier or the **Kanji Zoom: Open current note** command. In Reading view, the magnifier next to an H1–H3 heading opens just that section.
+2. Drag the **font size** slider to resize text from 18 to 72 px. The viewer remembers your font size, line spacing, and furigana setting.
+3. Turn on **Furigana** to display readings such as `参加(さんか)` or `参加（さんか）` above the kanji.
+4. Hover over a kanji, or tap it on mobile, to see its readings, meanings, and matching vocabulary from your note.
 
-## Note format tips
+On desktop, use `+` or `-` to resize text, or hold `Cmd` / `Ctrl` while scrolling. Trackpad pinch also works. Press `Esc` to close the viewer or drag its toolbar to move the window.
 
-Vocabulary tables are detected by header names:
+## Kanji lookups and languages
+
+The built-in KANJIDIC2 dictionary covers about 3,000 kanji and works offline. The popup shows on and kun readings, meanings, stroke count, school grade, and the legacy JLPT level when available.
+
+Meanings are available in English, French, Spanish, and Portuguese. Kanji Zoom follows Obsidian’s language by default, and you can choose a dictionary language in settings. Missing translations fall back to English. The interface supports English and Korean, and Korean hanja readings are enabled by default when Obsidian is set to Korean.
+
+## Format your study notes
+
+Kanji Zoom finds matching words in vocabulary tables, grammar headings, and inline readings. Use these headers in vocabulary tables.
 
 | Column | Recognised headers |
 | --- | --- |
@@ -60,44 +47,15 @@ Grammar headings like `## 문법: ～を問(と)わず — ~을 따지지 않고
 
 See [`samples/`](samples/) for an example note.
 
-## Installation
-
-### From Community plugins
-Settings → Community plugins → Browse → search **Kanji Zoom**. *(after approval)*
-
-### Manual
-1. Download `main.js`, `manifest.json`, `styles.css` from the [latest release](../../releases/latest).
-2. Put them in `<your vault>/.obsidian/plugins/kanji-zoom/`.
-3. Reload Obsidian and enable **Kanji Zoom** in Settings → Community plugins.
-
-That's it — the kanji dictionary is **built into `main.js`**. Nothing else to download, and it works offline.
-
 ## Development
 
-*Only for working on the plugin itself — users don't need any of this.*
+Run `python3 tools/check.py` to build the plugin, check Obsidian compatibility, and run the test suite. Edit `src/main.js` for plugin changes. The build generates `main.js` from the source and dictionary data.
 
-No Node.js required.
-
-```bash
-python3 tools/check.py          # build + Obsidian compatibility checks + tests (run before every commit)
-python3 tools/build.py          # build only: src/main.js + data/kanji.json → main.js
-python3 tools/test.py           # tests only (Node.js, or macOS JavaScriptCore if Node isn't installed)
-```
-
-Edit `src/main.js`, never `main.js` (it is generated). `tools/check.py` catches common Obsidian review rejections: manifest rules, `innerHTML`, default hotkeys, Node-only `require` on a mobile-enabled plugin, network calls, regex lookbehind (older iOS), and unfinished manifest values in `--release` mode. CI runs it on every push.
-
-Regenerate `data/kanji.json` from the KANJIDIC2 source (maintainers only, e.g. for a new KANJIDIC2 release; the result is committed and embedded at build time):
-
-```bash
-curl -LO http://www.edrdg.org/kanjidic/kanjidic2.xml.gz
-python3 tools/build_kanji.py kanjidic2.xml.gz data/kanji.json
-```
-
-Release: bump `version` in `manifest.json`, add it to `versions.json`, then push a tag with the same version (e.g. `0.1.1`). GitHub Actions builds `main.js` and creates a draft release.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and [PUBLISHING.md](PUBLISHING.md) for the release process.
 
 ## Support
 
-If this plugin helps your study, you can [buy me a coffee ☕](https://buymeacoffee.com/kikyung).
+If Kanji Zoom helps with your studies, you can [buy me a coffee](https://buymeacoffee.com/kikyung).
 
 ## License
 
