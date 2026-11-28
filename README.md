@@ -5,7 +5,7 @@ so every stroke is clear — with furigana and kanji hover lookups on top.
 
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/kikyung)
 
-https://github.com/user-attachments/assets/3414fe81-4e29-4cd0-81a4-2287321b60ea
+![Kanji Zoom demo showing text resizing, furigana, and kanji lookups](docs/kanji-zoom-demo.gif)
 
 <table>
   <tr>
